@@ -23,7 +23,7 @@ class Main {
 
         if (espacoPrestadorLink != null) {
             String urlEspacoPrestador = espacoPrestadorLink.attr("abs:href")
-            println("Link encontrado: $urlEspacoPrestador")
+
 
             def espacoPrestadorDoc = Jsoup.connect(urlEspacoPrestador).get()
             def linksEspacoPrestador = espacoPrestadorDoc.select("a[href]")
@@ -31,14 +31,14 @@ class Main {
             Element link = linksEspacoPrestador.find { it.text().contains("Padrão para Troca de Informação") }
             String urlPadraoTrocaInformacao = link.attr("abs:href")
             if (urlEspacoPrestador != null) {
-                println("link2 encontrado: $urlPadraoTrocaInformacao")
+
                 padraoTisdoc = Jsoup.connect(urlPadraoTrocaInformacao).get()
 
 
                 def linksPadraoTis = padraoTisdoc.select("a[href]")
                 Element link3 = linksPadraoTis.find { it.text().contains("Clique aqui para acessar a versão Setembro/2025") }
                 String urlPadraotis = link3.attr("abs:href")
-                println("link 3 encontrado: $urlPadraotis")
+
 
 
                 def componenteComunicacaoDoc = Jsoup.connect(urlPadraotis).get()
@@ -51,7 +51,6 @@ class Main {
                         Element linkZipComunicacao = linha.selectFirst("a[href\$='.zip']")
                         if (linkZipComunicacao != null) {
                             String urlZip = linkZipComunicacao.attr("abs:href")
-                            println("Link do zip encontrado: $urlZip")
                             urlZipComunicacao = urlZip
                             break
 
@@ -90,7 +89,6 @@ class Main {
         String linkAbsHistorico = ''
         if(linkHistorico != null){
             linkAbsHistorico = linkHistorico.attr('abs:href')
-            println("link 4: $linkAbsHistorico")
         }else {
             println("Link 4 não encontrado")
         }
@@ -156,7 +154,7 @@ class Main {
 
         if (linkArqTabelaErro) {
             def urlArqdTabelaErro = linkArqTabelaErro.attr("abs:href")
-            println("url final para baixar: $urlArqdTabelaErro")
+
 
             def nomeArquivo = urlArqdTabelaErro.substring(urlArqdTabelaErro.lastIndexOf('/')+1)
             def caminhoArquivoE = Paths.get(pastaDestino,nomeArquivo)
