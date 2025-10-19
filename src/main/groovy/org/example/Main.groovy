@@ -143,6 +143,38 @@ class Main {
             println("Erro ao salvar arquivo: ${e.message}")
         }
 
+        //implementação task 3
+
+        def tabelasRelacionadas = padraoTisdoc.select("a[href]")
+        def linkTabelasRelacionadas  = tabelasRelacionadas.find { it.text().contains("Clique aqui para acessar as planilhas") }
+        def urlTabelasRelacionadas = linkTabelasRelacionadas.attr("abs:href")
+
+        def tabelaErro = Jsoup.connect(urlTabelasRelacionadas).get()
+
+        def linkTabelaErro = tabelaErro.select("a[href]")
+        def linkArqTabelaErro = linkTabelaErro.find { it.text().contains("Clique aqui para baixar a tabela de erros no envio para a ANS ") }
+
+        if (linkArqTabelaErro) {
+            def urlArqdTabelaErro = linkArqTabelaErro.attr("abs:href")
+            println("url final para baixar: $urlArqdTabelaErro")
+
+            def nomeArquivo = urlArqdTabelaErro.substring(urlArqdTabelaErro.lastIndexOf('/')+1)
+            def caminhoArquivoE = Paths.get(pastaDestino,nomeArquivo)
+
+            try {
+                configure {
+                    request.uri = urlArqdTabelaErro
+                }.get {byte[] body ->
+                    Files.write(caminhoArquivoE, body, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)
+                    println("Arquivo salvo em: $caminhoArquivoE")
+                }
+            } catch (Exception e) {
+                println("Erro ao baixar o arquivo: ${e.message}")
+            }
+        } else {
+            println("Link da tabela de erros não encontrado.")
+        }
+
 
     }
 }
